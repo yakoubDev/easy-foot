@@ -1,26 +1,73 @@
 @import "tailwindcss";
 
+* {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  scroll-padding-top: 60px;
+  
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --accent : #36e28c;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-accent: var(--accent);
+  --font-nunito: var(--font-nunito);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+   
   }
 }
 
+
 body {
-  background: var(--background);
+  background: linear-gradient(135deg, #1a4a1a 0%, #0f2b0f 30%, #0a1e0a 70%, #1c481c 100%);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+
+@layer base {
+  body {
+    @apply px-2 py-2 md:px-6 xl:px-12
+  }
+}
+
+
+@layer components{
+  /* Main Headings */
+  .h1 {
+    @apply text-4xl md:text-6xl lg:text-8xl font-extrabold tracking-[-0.02em] text-white leading-tight;
+  }
+  
+  .h2 {
+    @apply text-2xl md:text-4xl lg:text-5xl font-bold tracking-[-0.01em] text-white leading-tight;
+  }
+  
+  .h3 {
+    @apply text-2xl md:text-3xl lg:text-4xl font-bold tracking-[-0.01em] text-white leading-snug;
+  }
+
+    /* Special Text Styles */
+  .text-hero {
+    @apply text-[56px] md:text-8xl lg:text-9xl font-black tracking-[-0.03em] text-white leading-none;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-green-400 to-emerald-300 bg-clip-text text-transparent ;
+  }
+
+  .cta{
+    @apply bg-gradient-to-r from-green-600 to-emerald-700 px-4 py-2 rounded-lg font-semibold text-lg tracking-[1px] transition-colors duration-200 hover:scale-105 transform cursor-pointer;
+  }
 }
