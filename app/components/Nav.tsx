@@ -9,6 +9,7 @@ import {
   MdClose,
   MdLogin,
   MdLogout,
+  MdOutlineRequestPage,
 } from "react-icons/md";
 import { IoIosFootball } from "react-icons/io";
 import { useState } from "react";
@@ -26,6 +27,9 @@ export const publicLinks = [
     path: "/stadiums",
     icon: <MdOutlineStadium />,
   },
+];
+
+const userLinks = [
   {
     name: "Matches",
     path: "/matches",
@@ -33,11 +37,21 @@ export const publicLinks = [
   },
 ];
 
-const authLinks = [
+const adminLinks = [
   {
     name: "Dashboard",
     path: "/dashboard",
     icon: <MdOutlineDashboard />,
+  },
+  {
+    name: "Stadium",
+    path: "/dashboard/stadium",
+    icon: <MdOutlineStadium />,
+  },
+  {
+    name: "Requests",
+    path: "/dashboard/requests",
+    icon: <MdOutlineRequestPage />,
   },
 ];
 
@@ -53,6 +67,7 @@ const Nav = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user } = useAuth();
   const pathname = usePathname();
+  
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
@@ -74,12 +89,19 @@ const Nav = () => {
       console.error("Logout failed:", error);
     }
   };
+
   const getNavigationLinks = () => {
     let links = [...publicLinks];
 
     if (user) {
-      // User is authenticated - show auth-only links
-      links = [...links, ...authLinks];
+      // Check user role and add appropriate links
+      if (user.role === 'admin' || user.role === 'owner') {
+        // Stadium owners get admin links
+        links = [...links, ...adminLinks];
+      } else {
+        // Regular users get user links
+        links = [...links, ...userLinks];
+      }
     } else {
       // User is not authenticated - show guest links
       links = [...links, ...guestLinks];
@@ -87,7 +109,9 @@ const Nav = () => {
 
     return links;
   };
-  const navigationlinks = getNavigationLinks();
+
+  const navigationLinks = getNavigationLinks();
+
   return (
     <div className="flex min-h-screen">
       {/* Desktop Sidebar - Hidden on mobile */}
@@ -95,13 +119,13 @@ const Nav = () => {
         <nav className="h-full bg-black/30 backdrop-blur-md border-r border-white/10 p-4">
           {/* Logo/Brand */}
           <div className="mb-8 px-2">
-            <h2 className="text-xl font-bold text-white">Fast Foot</h2>
+            <h2 className="text-xl font-bold text-white">Easy Foot</h2>
             <p className="text-sm text-white/60">Stadium Manager</p>
           </div>
 
           {/* Navigation Links */}
           <ul className="flex flex-col gap-2">
-            {navigationlinks.map((link, index) => (
+            {navigationLinks.map((link, index) => (
               <li key={index}>
                 <Link
                   href={link.path}
@@ -124,7 +148,7 @@ const Nav = () => {
             {user && (
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-500/80 hover:text-red-500 bg-red-500/10 hover:bg-red-500/15  transition-all cursor-pointer duration-200 group mb-2"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-500/80 hover:text-red-500 bg-red-500/10 hover:bg-red-500/15 transition-all cursor-pointer duration-200 group mb-2"
               >
                 <span className="text-lg group-hover:scale-110 transition-transform">
                   <MdLogout />
@@ -134,7 +158,12 @@ const Nav = () => {
             )}
             <div className="bg-white/5 rounded-lg p-3 border border-white/10">
               <p className="text-xs text-white/60 mb-1">Quick Stats</p>
-              <p className="text-sm text-white font-medium">5 Active Matches</p>
+              <p className="text-sm text-white font-medium">
+                {user?.role === 'admin' || user?.role === 'owner' 
+                  ? '5 Active Bookings' 
+                  : '3 Upcoming Matches'
+                }
+              </p>
             </div>
           </div>
         </nav>
@@ -144,7 +173,7 @@ const Nav = () => {
       <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-black/30 backdrop-blur-md border-b border-white/10">
         <div className="flex items-center justify-between p-4">
           <div>
-            <h2 className="text-lg font-bold text-white">Fast Foot</h2>
+            <h2 className="text-lg font-bold text-white">Easy Foot</h2>
           </div>
           <button
             onClick={toggleMobileMenu}
@@ -172,32 +201,29 @@ const Nav = () => {
           {/* Mobile Menu */}
           <div className="absolute top-16 left-0 right-0 bg-black/90 backdrop-blur-md border-b border-white/10 p-4">
             <ul className="flex flex-col gap-2">
-              {navigationlinks.map((link, index) =>
-                !user && link.name === "Dashboard" ? null : !user &&
-                  link.name === "Signin" ? null : (
-                  <li key={index}>
-                    <Link
-                      href={link.path}
-                      onClick={closeMobileMenu}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all duration-200 group ${
-                        pathname === link.path ? "bg-white/10" : ""
-                      }`}
-                    >
-                      <span className="text-lg group-hover:scale-110 transition-transform">
-                        {link.icon}
-                      </span>
-                      <span className="font-medium">{link.name}</span>
-                    </Link>
-                  </li>
-                )
-              )}
+              {navigationLinks.map((link, index) => (
+                <li key={index}>
+                  <Link
+                    href={link.path}
+                    onClick={closeMobileMenu}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all duration-200 group ${
+                      pathname === link.path ? "bg-white/10" : ""
+                    }`}
+                  >
+                    <span className="text-lg group-hover:scale-110 transition-transform">
+                      {link.icon}
+                    </span>
+                    <span className="font-medium">{link.name}</span>
+                  </Link>
+                </li>
+              ))}
             </ul>
 
             {/* Logout Button */}
             {user && (
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-500/80 hover:text-red-500 bg-red-500/10 hover:bg-red-500/15  transition-all cursor-pointer duration-200 group mb-2 mt-4"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-500/80 hover:text-red-500 bg-red-500/10 hover:bg-red-500/15 transition-all cursor-pointer duration-200 group mb-2 mt-4"
               >
                 <span className="text-lg group-hover:scale-110 transition-transform">
                   <MdLogout />
@@ -209,7 +235,12 @@ const Nav = () => {
             {/* Mobile Quick Stats */}
             <div className="mt-4 bg-white/5 rounded-lg p-3 border border-white/10">
               <p className="text-xs text-white/60 mb-1">Quick Stats</p>
-              <p className="text-sm text-white font-medium">5 Active Matches</p>
+              <p className="text-sm text-white font-medium">
+                {user?.role === 'admin' || user?.role === 'owner' 
+                  ? '5 Active Bookings' 
+                  : '3 Upcoming Matches'
+                }
+              </p>
             </div>
           </div>
         </div>

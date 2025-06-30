@@ -1,6 +1,7 @@
 import React from "react";
 import { FaStar, FaCrown, FaBolt } from "react-icons/fa";
 import * as motion from 'framer-motion/client';
+import Link from "next/link";
 
 const Home = () => {
   const plans = [
@@ -54,8 +55,8 @@ const Home = () => {
       transition={{ duration: 0.5, ease: 'easeIn' }}>
       {/* Hero Section */}
       <div className="text-center space-y-4 md:space-y-6">
-        <h1 className="text-hero text-gradient">Fast Foot</h1>
-        <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-[-0.01em] text-white leading-tight opacity-90">
+        <h1 className="text-hero text-gradient leading-40">Easy Foot</h1>
+        <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-[-0.01em] text-white opacity-90">
           Best Stadium Manager
         </h2>
         <p className="text-lg md:text-xl text-white/80 max-w-lg mx-auto">
@@ -64,9 +65,11 @@ const Home = () => {
       </div>
 
       {/* CTA Button */}
-      <button className="bg-gradient-to-r from-green-600 to-emerald-700 px-4 py-2 rounded-lg font-semibold text-lg tracking-[1px] transition-colors duration-200 hover:scale-105 transform cursor-pointer">
-        Find Match
-      </button>
+      <Link href={"/stadiums"} >
+        <button className="cta">
+          Find Match
+        </button>
+      </Link>
 
       {/* Simple Stats */}
       <div className="grid grid-cols-3 gap-4 mt-8 w-full text-center">

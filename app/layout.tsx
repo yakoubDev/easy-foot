@@ -13,7 +13,7 @@ const nunito = Nunito_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Fast Foot",
+  title: "Easy Foot",
   description: "Find your next football match!",
 };
 

@@ -116,7 +116,7 @@ const SignIn = () => {
           <div className="flex items-center justify-center gap-3 mb-4">
             <FaFutbol className="text-4xl text-green-400" />
             <h1 className="text-4xl font-black tracking-[-0.02em] bg-gradient-to-r from-green-400 to-emerald-300 bg-clip-text text-transparent">
-              Fast Foot
+              Easy Foot
             </h1>
             <FaFutbol className="text-4xl text-green-400" />
           </div>

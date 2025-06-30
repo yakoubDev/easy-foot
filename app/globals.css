@@ -68,6 +68,6 @@ body {
   }
 
   .cta{
-    @apply bg-gradient-to-r from-green-600 to-emerald-700 px-4 py-2 rounded-lg font-semibold text-lg tracking-[1px] transition-colors duration-200 hover:scale-105 transform cursor-pointer;
+    @apply bg-gradient-to-r from-green-600 to-emerald-700 px-4 py-2 rounded-lg font-semibold text-lg tracking-[1px] transition-colors duration-200 hover:scale-[101%] hover:opacity-95 transform cursor-pointer;
   }
 }
